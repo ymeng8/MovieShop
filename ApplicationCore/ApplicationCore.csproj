@@ -8,8 +8,16 @@
 
   <ItemGroup>
     <None Remove="Entities\" />
+    <None Remove="Models\" />
+    <None Remove="Contracts\" />
+    <None Remove="Contracts\Repository\" />
+    <None Remove="Contracts\Service\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
+    <Folder Include="Models\" />
+    <Folder Include="Contracts\" />
+    <Folder Include="Contracts\Repository\" />
+    <Folder Include="Contracts\Service\" />
   </ItemGroup>
 </Project>
