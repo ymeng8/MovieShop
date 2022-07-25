@@ -1,0 +1,158 @@
+﻿@model ApplicationCore.Models.MovieDetailsModel
+
+@{
+    ViewData["Title"] = "Movie Details";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css" integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<div class="container-fluid">
+    <div class="row bg-dark bg-gradient">
+        <div class="col-4">
+            <img src="@Model.PosterUrl" alt="@Model.Title" class="img-fluid float-end" style="width:20vw; height:auto;" />
+        </div>
+        <div class="col-6 py-3 px-5 text-white">
+            <h2>@Model.Title</h2>
+            <p class="text-white-50 mb-2" style="font-size:small">@Model.Tagline</p>
+            <div class="hstack gap-1 justify-content-end fw-bold">
+                @foreach (var genre in Model.Genres)
+                {
+                    <span class="badge rounded-pill bg-secondary ms-1">@genre.Name</span>
+                }
+            </div>
+            <p class="fw-semibold text-white-50">
+                <span>@Model.RunTime m | </span>
+                <span>@Model.ReleaseDate.Value.Year</span>
+            </p>
+            @* dummy ratings *@
+            <p class="badge bg-success fw-bold">8.9</p>
+            <p>@Model.Overview</p>
+        </div>
+        <div class="col-2 py-5 pe-5">
+            @* dummy buttons *@
+            <div class="vstack gap-3">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                    <i class="bi-card-text me-2"></i>REVIEW
+                </button>
+                <div class="modal fade" id="reviewModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reviewModalLabel">ADD REVIEW</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="reviewRating" class="form-label">Choose rating:</label>
+                                        <select class="form-select" id="reviewRating">
+                                            <option selected></option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reviewTextArea" class="form-label">Write review:</label>
+                                        <textarea class="form-control" id="reviewTextArea" rows="3"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#purchaseModal">
+                    BUY @Model.Price.Value.ToString("C")
+                </button>
+                <div class="modal fade" id="purchaseModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="purchaseModalLabel">CONFIRM PURCHASE</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                Buy <strong>@Model.Title</strong> for <strong>@Model.Price.Value.ToString("C")</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-light">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Yes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4 bg-light py-3 px-5">
+            <div class="mb-4">
+                <h5>MOVIE FACTS</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent">
+                        <i class="bi-calendar3 me-1"></i>
+                        <span>Release Date</span>
+                        <span class="badge rounded-pill bg-dark ms-1">@Model.ReleaseDate.Value.ToString("MMMM d, yyyy")</span>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="bi-hourglass-split me-1"></i>
+                        <span>Run Time</span>
+                        <span class="badge rounded-pill bg-dark ms-1">@Model.RunTime m</span>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="bi-cash me-1"></i>
+                        <span>Box Office</span>
+                        <span class="badge rounded-pill bg-dark ms-1">@Model.Revenue.Value.ToString("C")</span>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="bi-currency-dollar me-1"></i>
+                        <span>Budget</span>
+                        <span class="badge rounded-pill bg-dark ms-1">@Model.Budget.Value.ToString("C")</span>
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <a href="@Model.ImdbUrl" class="fa fa-brands fa-imdb text-decoration-none text-dark"></a>
+                        <a href="#" class="bi-share-fill text-dark ms-2"></a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h5>TRAILERS</h5>
+                <ul class="list-group list-group-flush">
+                    @foreach (var trailer in Model.Trailers)
+                    {
+                        <li class="list-group-item bg-transparent">
+                            <i class="bi-youtube me-1"></i>
+                            <a href="@trailer.TrailerUrl" class="text-decoration-none text-dark">@trailer.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-6 py-3 px-5">
+            <h5>CASTS</h5>
+            <ul class="list-group list-group-flush">
+                @foreach (var cast in Model.Casts)
+                {
+                    <li class="list-group-item">
+                        <div class="hstack">
+                            <img class="img-fluid rounded-circle" style="width:2vw" src="@cast.ProfilePath" alt="@cast.Name">
+                            <span class="align-self-start" style="width:15vw; margin-left: 4vw;">@cast.Name</span>
+                            <span class="align-self-start" style="width:15vw; margin-left: 4vw;">@cast.Character</span>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
