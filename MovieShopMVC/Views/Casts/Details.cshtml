@@ -1,0 +1,46 @@
+﻿@model ApplicationCore.Models.CastDetailsModel
+
+@{
+    ViewData["Title"] = "Cast Details";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4 p-5 bg-dark bg-gradient text-light" style="min-height: calc(100vh - 56px);">
+            <h2 class="text-center">@Model.Name</h2>
+            <img class="img-fluid rounded-circle d-block mx-auto my-4" style="width:65%;" src="@Model.ProfilePath" alt="Profile pic">
+            <div class="px-4">
+                <h5>Personal Info</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent text-light border-bottom border-secondary">
+                        <i class="bi-person-fill me-1"></i>
+                        <span>Gender</span>
+                        <span class="badge rounded-pill bg-secondary ms-1">@Model.Gender</span>
+                    </li>
+                    <li class="list-group-item bg-transparent text-light border-bottom border-secondary">
+                        <i class="bi-info-circle-fill me-1"></i>
+                        <span>Website</span>
+                        <span class="badge rounded-pill bg-secondary ms-1">
+                            <a class="text-decoration-none text-light" href="@Model.TmdbUrl">TMDb</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-8 pt-4 px-4">
+            <h4 class="mb-4">Appears In</h4>
+            <div class="row">
+                @foreach (var movie in Model.Movies)
+                {
+                    <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                        <div class="card mb-4">
+                            <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id">
+                                <img src="@movie.PosterUrl" class="img-fluid rounded" alt="@movie.Title" />
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

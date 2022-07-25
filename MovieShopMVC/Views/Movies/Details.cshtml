@@ -146,8 +146,12 @@
                 {
                     <li class="list-group-item">
                         <div class="hstack">
-                            <img class="img-fluid rounded-circle" style="width:2vw" src="@cast.ProfilePath" alt="@cast.Name">
-                            <span class="align-self-start" style="width:15vw; margin-left: 4vw;">@cast.Name</span>
+                            <a asp-controller="Casts" asp-action="Details" asp-route-id="@cast.Id">
+                                <img class="img-fluid rounded-circle" style="width:2vw" src="@cast.ProfilePath" alt="@cast.Name">
+                            </a>
+                            <a asp-controller="Casts" asp-action="Details" asp-route-id="@cast.Id" class="align-self-start text-decoration-none text-dark" style="width:15vw; margin-left: 4vw;">
+                                <span>@cast.Name</span>
+                            </a>
                             <span class="align-self-start" style="width:15vw; margin-left: 4vw;">@cast.Character</span>
                         </div>
                     </li>
