@@ -6,7 +6,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-4 p-5 bg-dark bg-gradient text-light" style="min-height: calc(100vh - 56px);">
+        <div class="col-4 p-5 bg-dark bg-gradient text-light fixed-top" style="min-height: calc(100vh - 55px); margin-top: 56px; z-index: -1">
             <h2 class="text-center">@Model.Name</h2>
             <img class="img-fluid rounded-circle d-block mx-auto my-4" style="width:65%;" src="@Model.ProfilePath" alt="Profile pic">
             <div class="px-4">
@@ -27,7 +27,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-8 pt-4 px-4">
+        <div class="col-8 pt-4 px-4 offset-4" style="min-height: calc(100vh - 55px);">
             <h4 class="mb-4">Appears In</h4>
             <div class="row">
                 @foreach (var movie in Model.Movies)
