@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "wK0pxfXtvq14MoFuDsQevUkjDOrgJkz+VQHlqxnZ7f4a85AMM/BLquo+ih4gDUpM/vbOrJiNQFAqJQYBCTAiTA==",
+  "dgSpecHash": "6ZvAQuJWaaFoh4dBIfidvxCbIhgvdpsw7Unm756t27yaLhyD04I33sTpnNDv3YTGAP8nkuoORcGlmkos17exhg==",
   "success": true,
   "projectFilePath": "/Users/yanjun.meng/Documents/GitHub/MovieShop/Infrastructure/Infrastructure.csproj",
   "expectedPackageFiles": [
+    "/Users/yanjun.meng/.nuget/packages/microsoft.aspnetcore.cryptography.internal/6.0.7/microsoft.aspnetcore.cryptography.internal.6.0.7.nupkg.sha512",
+    "/Users/yanjun.meng/.nuget/packages/microsoft.aspnetcore.cryptography.keyderivation/6.0.7/microsoft.aspnetcore.cryptography.keyderivation.6.0.7.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.data.sqlclient/2.1.4/microsoft.data.sqlclient.2.1.4.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.data.sqlclient.sni.runtime/2.1.1/microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512",
