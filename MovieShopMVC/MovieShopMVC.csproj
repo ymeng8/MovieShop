@@ -12,6 +12,8 @@
     <None Remove="Views\Movie\" />
     <None Remove="Views\Casts\" />
     <None Remove="Views\Account\" />
+    <None Remove="Infra\" />
+    <None Remove="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.7" />
@@ -32,5 +34,7 @@
     <Folder Include="Views\Movies\" />
     <Folder Include="Views\Casts\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="Infra\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
 </Project>

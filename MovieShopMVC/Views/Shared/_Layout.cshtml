@@ -32,16 +32,7 @@
                                 <li><a class="dropdown-item" href="#">TODO</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item me-2 align-self-center">
-                            <a class="btn btn-sm btn-outline-light rounded-pill" asp-controller="Account" asp-action="Login">
-                                Login
-                            </a>
-                        </li>
-                        <li class="nav-item align-self-center">
-                            <a class="btn btn-sm btn-outline-light rounded-pill" asp-controller="Account" asp-action="Register">
-                                Register
-                            </a>
-                        </li>
+                        <partial name="_LoginInfoPartial" />
                     </ul>
                 </div>
             </div>
