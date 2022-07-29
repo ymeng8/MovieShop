@@ -17,7 +17,9 @@
             <div class="hstack gap-1 justify-content-end fw-bold">
                 @foreach (var genre in Model.Genres)
                 {
-                    <span class="badge rounded-pill bg-secondary ms-1">@genre.Name</span>
+                    <a asp-controller="Movies" asp-action="GenreMovies" asp-route-id="@genre.Id">
+                        <span class="badge rounded-pill bg-secondary ms-1">@genre.Name</span>
+                    </a>
                 }
             </div>
             <p class="fw-semibold text-white-50">
