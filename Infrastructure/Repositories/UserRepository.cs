@@ -26,6 +26,12 @@ namespace Infrastructure.Repositories
             var user = await _movieShopDbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             return user;
         }
+
+        public async Task<User> GetUserPurchases(int userId)
+        {
+            var purchases = await _movieShopDbContext.Users.Include(u => u.Purchases).ThenInclude(p => p.Movie).FirstOrDefaultAsync(u => u.Id == userId);
+            return purchases;
+        }
     }
 }
 

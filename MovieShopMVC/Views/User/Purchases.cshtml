@@ -1,6 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<ApplicationCore.Models.MovieCardModel>
+
 @{
+    ViewData["Title"] = "Purchased Movies";
 }
 
+<div class="container-fluid">
+    <div class="row px-3 pt-2">
+        @foreach (var movieCard in Model)
+        {
+            <div class="col-6 col-sm-4 col-lg-3 col-xl-2">
+                <div class="card mb-4">
+                    <a asp-controller="Movies" asp-action="Details" asp-route-id="@movieCard.Id">
+                        <img src="@movieCard.PosterUrl" class="img-fluid rounded-top" alt="@movieCard.Title" />
+                    </a>
+                    <partial name="_PurchaseDetailsPartial" model="@movieCard" />
+                </div>
+            </div>
+        }
+    </div>
+</div>

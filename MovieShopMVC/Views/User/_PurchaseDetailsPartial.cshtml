@@ -1,0 +1,55 @@
+﻿@model ApplicationCore.Models.MovieCardModel
+@using ApplicationCore.Contracts.Service
+@using MovieShopMVC.Infra
+@inject IUserService userService
+@inject ICurrentUser currentUser
+
+@{
+    var purchaseDetails = await userService.GetPurchasesDetails(currentUser.UserId, Model.Id);
+    string modalTarget = "#purchaseForMovie" + Model.Id;
+    string modalId = "purchaseForMovie" + Model.Id;
+}
+
+<a class="btn btn-sm btn-secondary bg-gradient" style="border-radius: 0 0 0.25rem 0.25rem" data-bs-toggle="modal" data-bs-target="@modalTarget">Purchase Details</a>
+<div class="modal fade" id="@modalId" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="purchaseModalLabel">Purchase Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="container-fluid p-0">
+                    <div class="row m-0">
+                        <div class="col-3 p-0">
+                            <img class="img-fluid" src="@purchaseDetails.PosterUrl" alt="@purchaseDetails.Title" style="border-bottom-left-radius: 0.25rem" />
+                        </div>
+                        <div class="col-9 p-4">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="bi-camera-video me-1"></i>
+                                    <strong>@purchaseDetails.Title</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi-calendar3 me-1"></i>
+                                    <span>Purchased Date</span>
+                                    <span class="badge rounded-pill bg-dark ms-1">@purchaseDetails.PurchaseDatetTime.ToString("MMM d, yyyy")</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi-cash me-1"></i>
+                                    <span>Price</span>
+                                    <span class="badge rounded-pill bg-dark ms-1">@purchaseDetails.TotalPrice.ToString("C")</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi-check-circle me-1"></i>
+                                    <span>Purchase Number</span>
+                                    <span class="badge rounded-pill bg-dark ms-1">@purchaseDetails.PurchaseNumber</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

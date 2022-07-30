@@ -22,6 +22,7 @@ namespace Infrastructure.Data
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Purchase> Purchases { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +35,14 @@ namespace Infrastructure.Data
             modelBuilder.Entity<UserRole>(ConfigureUserRole);
             modelBuilder.Entity<Review>(ConfigureReview);
             modelBuilder.Entity<Favorite>(ConfigureFavorite);
+            modelBuilder.Entity<Purchase>(ConfigurePurchase);
+        }
+
+        private void ConfigurePurchase(EntityTypeBuilder<Purchase> builder)
+        {
+            builder.HasKey(p => new { p.UserId, p.MovieId });
+            builder.Property(p => p.PurchaseNumber).ValueGeneratedOnAdd();
+            builder.Property(p => p.TotalPrice).HasColumnType("decimal(5, 2)");
         }
 
         private void ConfigureFavorite(EntityTypeBuilder<Favorite> builder)

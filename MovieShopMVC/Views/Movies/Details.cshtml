@@ -1,7 +1,19 @@
-﻿@model ApplicationCore.Models.MovieDetailsModel
+﻿@using ApplicationCore.Contracts.Service
+@using MovieShopMVC.Infra
+@inject ICurrentUser currentUser
+@inject IUserService userService
+@model ApplicationCore.Models.MovieDetailsModel
 
 @{
     ViewData["Title"] = "Movie Details";
+}
+
+@{
+    bool isPurchased = false;
+}
+@if (currentUser.IsAuthenticated)
+{
+    isPurchased = await userService.IsMoviePurchased(Model.Id, currentUser.UserId);
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css" integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -73,26 +85,16 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#purchaseModal">
-                    BUY @Model.Price.Value.ToString("C")
-                </button>
-                <div class="modal fade" id="purchaseModal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="purchaseModalLabel">CONFIRM PURCHASE</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                Buy <strong>@Model.Title</strong> for <strong>@Model.Price.Value.ToString("C")</strong>?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-light">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Yes</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+                @if (isPurchased)
+                {
+                    <button type="button" class="btn btn-sm btn-light">WATCH MOVIE</button>
+                }
+                else
+                {
+                    <partial name="_BuyMoviePartial" model=Model />
+                }
+
             </div>
         </div>
     </div>

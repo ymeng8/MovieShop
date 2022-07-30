@@ -7,6 +7,7 @@ namespace ApplicationCore.Contracts.Repository
 	{
 		Task<User> GetUserByEamil(string email);
 		Task<User> AddUser(User user);
+		Task<User> GetUserPurchases(int userId);
 	}
 }
 
