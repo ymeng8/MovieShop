@@ -8,12 +8,52 @@ namespace Infrastructure.Services
 {
     public class UserService : IUserService
     {
+        private readonly IFavoriteRepository _favoriteRepository;
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IUserRepository _userRepository;
-        public UserService(IPurchaseRepository purchaseRepository, IUserRepository userRepository)
+        public UserService(IPurchaseRepository purchaseRepository, IUserRepository userRepository, IFavoriteRepository favoriteRepository)
         {
             _purchaseRepository = purchaseRepository;
             _userRepository = userRepository;
+            _favoriteRepository = favoriteRepository;
+        }
+        public async Task<bool> AddFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            Favorite dbFavorite = new Favorite
+            {
+                MovieId = favoriteRequest.MovieId,
+                UserId = favoriteRequest.UserId
+            };
+            await _favoriteRepository.AddFavorite(dbFavorite);
+            return true;
+        }
+
+        public async Task<bool> RemoveFavorite(FavoriteRequestModel favoriteRequest)
+        {
+            var favorite = await _favoriteRepository.GetById(favoriteRequest.MovieId, favoriteRequest.UserId);
+            await _favoriteRepository.RemoveFavorite(favorite);
+            return true;
+        }
+
+        public async Task<bool> FavoriteExists(int userId, int movieId)
+        {
+            var favorite = await _favoriteRepository.GetById(movieId, userId);
+            if (favorite != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<List<MovieCardModel>> GetAllFavoritesForUser(int userId)
+        {
+            var movieCards = new List<MovieCardModel>();
+            var userFavorites = await _userRepository.GetUserFavorites(userId);
+            foreach (var f in userFavorites.Favorites)
+            {
+                movieCards.Add(new MovieCardModel { Id = f.MovieId, Title = f.Movie.Title, PosterUrl = f.Movie.PosterUrl });
+            }
+            return movieCards;
         }
 
         public async Task<List<MovieCardModel>> GetAllPurchasesForUser(int id)

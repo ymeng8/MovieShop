@@ -32,6 +32,12 @@ namespace Infrastructure.Repositories
             var purchases = await _movieShopDbContext.Users.Include(u => u.Purchases).ThenInclude(p => p.Movie).FirstOrDefaultAsync(u => u.Id == userId);
             return purchases;
         }
+
+        public async Task<User> GetUserFavorites(int userId)
+        {
+            var favorites = await _movieShopDbContext.Users.Include(u => u.Favorites).ThenInclude(f => f.Movie).FirstOrDefaultAsync(u => u.Id == userId);
+            return favorites;
+        }
     }
 }
 

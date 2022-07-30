@@ -10,10 +10,12 @@
 
 @{
     bool isPurchased = false;
+    bool favoriteExists = false;
 }
 @if (currentUser.IsAuthenticated)
 {
     isPurchased = await userService.IsMoviePurchased(Model.Id, currentUser.UserId);
+    favoriteExists = await userService.FavoriteExists(currentUser.UserId, Model.Id);
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css" integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -24,7 +26,19 @@
             <img src="@Model.PosterUrl" alt="@Model.Title" class="img-fluid float-end" style="width:20vw; height:auto;" />
         </div>
         <div class="col-6 py-3 px-5 text-white">
-            <h2>@Model.Title</h2>
+            <div class="hstack gap-2 justify-content-between">
+                <h2>@Model.Title</h2>
+                <div>
+                    @if (favoriteExists)
+                    {
+                        <a asp-controller="User" asp-action="RemoveFavorite" asp-route-movieId="@Model.Id"><i class="bi-star-fill h4 text-warning"></i></a>
+                    }
+                    else
+                    {
+                        <a asp-controller="User" asp-action="FavoriteMovie" asp-route-movieId="@Model.Id"><i class="bi-star h4 text-warning"></i></a>
+                    }
+                </div>
+            </div>
             <p class="text-white-50 mb-2" style="font-size:small">@Model.Tagline</p>
             <div class="hstack gap-1 justify-content-end fw-bold">
                 @foreach (var genre in Model.Genres)
