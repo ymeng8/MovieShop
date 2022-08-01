@@ -47,34 +47,24 @@ namespace MovieShopMVC.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> BuyMovie(int movieId, decimal price)
+        [HttpPost]
+        public async Task<IActionResult> BuyMovie(PurchaseRequestModel purchaseRequest)
         {
-            PurchaseRequestModel model = new PurchaseRequestModel
-            {
-                MovieId = movieId,
-                TotalPrice = price,
-                UserId = _currentUser.UserId
-            };
-
-            bool purchaseResult = await _userService.PurchaseMovie(model);
-            return RedirectToAction("Details", "Movies", new { id = model.MovieId });
+            await _userService.PurchaseMovie(purchaseRequest);
+            return RedirectToAction("Details", "Movies", new { id = purchaseRequest.MovieId });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> FavoriteMovie(int movieId)
+        [HttpPost]
+        public async Task<IActionResult> FavoriteMovie(FavoriteRequestModel favoriteRequest)
         {
-
-            FavoriteRequestModel model = new FavoriteRequestModel { UserId = _currentUser.UserId, MovieId = movieId };
-            await _userService.AddFavorite(model);
-            return RedirectToAction("Details", "Movies", new { id = movieId });
+            await _userService.AddFavorite(favoriteRequest);
+            return RedirectToAction("Details", "Movies", new { id = favoriteRequest.MovieId });
         }
-        [HttpGet]
-        public async Task<IActionResult> RemoveFavorite(int movieId)
+        [HttpPost]
+        public async Task<IActionResult> RemoveFavorite(FavoriteRequestModel favoriteRequest)
         {
-            FavoriteRequestModel model = new FavoriteRequestModel { UserId = _currentUser.UserId, MovieId = movieId };
-            await _userService.RemoveFavorite(model);
-            return RedirectToAction("Details", "Movies", new { id = movieId });
+            await _userService.RemoveFavorite(favoriteRequest);
+            return RedirectToAction("Details", "Movies", new { id = favoriteRequest.MovieId });
         }
 
         [HttpPost]

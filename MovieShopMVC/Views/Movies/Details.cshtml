@@ -9,16 +9,6 @@
     ViewData["Title"] = "Movie Details";
 }
 
-@{
-    bool isPurchased = false;
-    bool favoriteExists = false;
-}
-@if (currentUser.IsAuthenticated)
-{
-    isPurchased = await userService.IsMoviePurchased(Model.Id, currentUser.UserId);
-    favoriteExists = await userService.FavoriteExists(currentUser.UserId, Model.Id);
-}
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css" integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <div class="container-fluid">
@@ -29,16 +19,10 @@
         <div class="col-6 py-3 px-5 text-white">
             <div class="hstack gap-2 justify-content-between">
                 <h2>@Model.Title</h2>
-                <div>
-                    @if (favoriteExists)
-                    {
-                        <a asp-controller="User" asp-action="RemoveFavorite" asp-route-movieId="@Model.Id"><i class="bi-star-fill h4 text-warning"></i></a>
-                    }
-                    else
-                    {
-                        <a asp-controller="User" asp-action="FavoriteMovie" asp-route-movieId="@Model.Id"><i class="bi-star h4 text-warning"></i></a>
-                    }
-                </div>
+                @{
+                    FavoriteRequestModel favoriteRequest = new FavoriteRequestModel { MovieId = Model.Id };
+                }
+                <partial name="_FavoritePartial" model=@favoriteRequest />
             </div>
             <p class="text-white-50 mb-2" style="font-size:small">@Model.Tagline</p>
             <div class="hstack gap-1 justify-content-end fw-bold">
@@ -59,42 +43,24 @@
         </div>
         <div class="col-2 py-5 pe-5">
             <div class="vstack gap-3">
-                @if (currentUser.IsAuthenticated)
-                {
-                    var reviewExists = await userService.ReviewExists(currentUser.UserId, Model.Id);
-                    if (reviewExists)
+                @{
+                    ReviewRequestModel reviewRequest = new ReviewRequestModel
                     {
-                        ReviewDetailsModel reviewDetails = await userService.GetReviewDetails(currentUser.UserId, Model.Id);
-                        <partial name="_ReviewDetailsPartial" model=reviewDetails />
+                        MovieId = Model.Id,
+                        MovieTitle = Model.Title
+                    };
+                }
+                <partial name="_ReviewPartial" model="@reviewRequest" />
 
-                    }
-                    else
+                @{
+                    PurchaseRequestModel purchaseRequest = new PurchaseRequestModel
                     {
-                        ReviewRequestModel reviewRequest = new ReviewRequestModel
-                        {
-                            MovieId = Model.Id,
-                            MovieTitle = Model.Title,
-                            UserId = currentUser.UserId
-                        };
-                        <partial name="_AddReviewPartial" model=reviewRequest />
-
-                    }
+                        MovieId = Model.Id,
+                        MovieTitle = Model.Title,
+                        TotalPrice = Model.Price.Value
+                    };
+                    <partial name="_PurchasePartial" model="purchaseRequest" />
                 }
-                else
-                {
-                    <a class="btn btn-sm btn-secondary" asp-controller="Account" asp-action="Login"><i class="bi-card-text me-2"></i>REVIEW</a>
-
-                }
-
-                @if (isPurchased)
-                {
-                    <button type="button" class="btn btn-sm btn-light">WATCH MOVIE</button>
-                }
-                else
-                {
-                    <partial name="_BuyMoviePartial" model=Model />
-                }
-
             </div>
         </div>
     </div>
