@@ -1,0 +1,12 @@
+﻿@model ApplicationCore.Models.ReviewRequestModel
+
+<form asp-controller="User" asp-action="DeleteReview">
+    <div>
+        <input asp-for="UserId" value="@Model.UserId" type="hidden" />
+        <input asp-for="MovieId" value="@Model.MovieId" type="hidden" />
+    </div>
+    <div class="text-end">
+        <button type="submit" class="btn btn-outline-danger">Delete</button>
+    </div>
+</form>
+

@@ -14,6 +14,12 @@ namespace ApplicationCore.Contracts.Service
 		Task<bool> AddFavorite(FavoriteRequestModel favoriteRequest);
 		Task<bool> RemoveFavorite(FavoriteRequestModel favoriteRequest);
 		Task<bool> FavoriteExists(int userId, int movieId);
+
+		Task<bool> AddMovieReview(ReviewRequestModel reviewRequest);
+		Task<bool> UpdateMovieReview(ReviewRequestModel editRequest);
+		Task<bool> DeleteMovieReview(ReviewRequestModel deleteRequest);
+		Task<bool> ReviewExists(int userId, int movieId);
+		Task<ReviewDetailsModel> GetReviewDetails(int userId, int movieId);
 	}
 }
 

@@ -1,5 +1,6 @@
 ﻿@using ApplicationCore.Contracts.Service
 @using MovieShopMVC.Infra
+@using ApplicationCore.Models
 @inject ICurrentUser currentUser
 @inject IUserService userService
 @model ApplicationCore.Models.MovieDetailsModel
@@ -57,48 +58,33 @@
             <p>@Model.Overview</p>
         </div>
         <div class="col-2 py-5 pe-5">
-            @* dummy buttons *@
             <div class="vstack gap-3">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#reviewModal">
-                    <i class="bi-card-text me-2"></i>REVIEW
-                </button>
-                <div class="modal fade" id="reviewModal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="reviewModalLabel">ADD REVIEW</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="reviewRating" class="form-label">Choose rating:</label>
-                                        <select class="form-select" id="reviewRating">
-                                            <option selected></option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="reviewTextArea" class="form-label">Write review:</label>
-                                        <textarea class="form-control" id="reviewTextArea" rows="3"></textarea>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @if (currentUser.IsAuthenticated)
+                {
+                    var reviewExists = await userService.ReviewExists(currentUser.UserId, Model.Id);
+                    if (reviewExists)
+                    {
+                        ReviewDetailsModel reviewDetails = await userService.GetReviewDetails(currentUser.UserId, Model.Id);
+                        <partial name="_ReviewDetailsPartial" model=reviewDetails />
+
+                    }
+                    else
+                    {
+                        ReviewRequestModel reviewRequest = new ReviewRequestModel
+                        {
+                            MovieId = Model.Id,
+                            MovieTitle = Model.Title,
+                            UserId = currentUser.UserId
+                        };
+                        <partial name="_AddReviewPartial" model=reviewRequest />
+
+                    }
+                }
+                else
+                {
+                    <a class="btn btn-sm btn-secondary" asp-controller="Account" asp-action="Login"><i class="bi-card-text me-2"></i>REVIEW</a>
+
+                }
 
                 @if (isPurchased)
                 {

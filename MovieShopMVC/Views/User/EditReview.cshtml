@@ -1,0 +1,52 @@
+﻿@model ApplicationCore.Models.ReviewRequestModel
+
+@{
+    ViewData["Title"] = "Edit Movie Review";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 mx-auto shadow p-4">
+            <h2>Edit Review</h2>
+            <h6 class="text-secondary">@Model.MovieTitle</h6>
+            <hr />
+            <form asp-action="EditReview">
+                <input asp-for="UserId" value="@Model.UserId" type="hidden" />
+                <input asp-for="MovieId" value="@Model.MovieId" type="hidden" />
+                <input asp-for="MovieTitle" value="@Model.MovieTitle" type="hidden" />
+                <div class="form-group mb-3">
+                    <label asp-for="Rating" for="reviewRating" class="form-label">Choose rating:</label>
+                    <select asp-for="Rating" id="reviewRating" class="form-select" required>
+                        @for (int i = 1; i < 11; i++)
+                        {
+                            if (i == (int)Model.Rating)
+                            {
+                                <option value="@i" selected>@i</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@i</option>
+
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="ReviewText" for="reviewTextArea" class="form-label">Write review:</label>
+                    <textarea asp-for="ReviewText" id="reviewTextArea" class="form-control" rows="12" required>@Model.ReviewText</textarea>
+                    <span asp-validation-for="ReviewText" class="text-danger"></span>
+                </div>
+                <div class="form-group text-end">
+                    <a class="btn btn-outline-secondary me-1" asp-controller="Movies" asp-action="Details" asp-route-id="@Model.MovieId">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save<i class="bi-save ms-2"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

@@ -8,15 +8,77 @@ namespace Infrastructure.Services
 {
     public class UserService : IUserService
     {
-        private readonly IFavoriteRepository _favoriteRepository;
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IUserRepository _userRepository;
-        public UserService(IPurchaseRepository purchaseRepository, IUserRepository userRepository, IFavoriteRepository favoriteRepository)
+        private readonly IFavoriteRepository _favoriteRepository;
+        private readonly IReviewRepository _reviewRepository;
+        public UserService(IPurchaseRepository purchaseRepository, IUserRepository userRepository, IFavoriteRepository favoriteRepository, IReviewRepository reviewRepository)
         {
             _purchaseRepository = purchaseRepository;
             _userRepository = userRepository;
             _favoriteRepository = favoriteRepository;
+            _reviewRepository = reviewRepository;
         }
+
+        public async Task<bool> AddMovieReview(ReviewRequestModel reviewRequest)
+        {
+            Review dbReview = new Review
+            {
+                MovieId = reviewRequest.MovieId,
+                UserId = reviewRequest.UserId,
+                Rating = reviewRequest.Rating,
+                ReviewText = reviewRequest.ReviewText,
+                CreatedDate = reviewRequest.CreatedDate
+            };
+            await _reviewRepository.AddReview(dbReview);
+            return true;
+        }
+
+        public async Task<bool> UpdateMovieReview(ReviewRequestModel editRequest)
+        {
+            Review newReview = new Review
+            {
+                MovieId = editRequest.MovieId,
+                UserId = editRequest.UserId,
+                Rating = editRequest.Rating,
+                ReviewText = editRequest.ReviewText,
+                CreatedDate = editRequest.CreatedDate
+            };
+            await _reviewRepository.EditReview(newReview);
+            return true;
+        }
+
+        public async Task<bool> DeleteMovieReview(ReviewRequestModel deleteRequest)
+        {
+            var review = await _reviewRepository.GetById(deleteRequest.MovieId, deleteRequest.UserId);
+            await _reviewRepository.RemoveReview(review);
+            return true;
+        }
+        public async Task<bool> ReviewExists(int userId, int movieId)
+        {
+            var review = await _reviewRepository.GetById(movieId, userId);
+            if (review != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<ReviewDetailsModel> GetReviewDetails(int userId, int movieId)
+        {
+            var review = await _reviewRepository.GetById(movieId, userId);
+            var reviewDetails = new ReviewDetailsModel
+            {
+                UserId = userId,
+                MovieId = movieId,
+                MovieTitle = review.Movie.Title,
+                Rating = review.Rating,
+                ReviewText = review.ReviewText,
+                CreatedDate = review.CreatedDate
+            };
+            return reviewDetails;
+        }
+
         public async Task<bool> AddFavorite(FavoriteRequestModel favoriteRequest)
         {
             Favorite dbFavorite = new Favorite

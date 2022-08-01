@@ -1,0 +1,48 @@
+﻿@model ApplicationCore.Models.ReviewDetailsModel
+@using ApplicationCore.Contracts.Service
+@using ApplicationCore.Models
+@inject IUserService userService
+
+<button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#reviewDetailsModal">
+    <i class="bi-card-text me-2"></i>REVIEW
+</button>
+
+<div class="modal fade" id="reviewDetailsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">REVIEW DETAILS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-break">
+                <ul class="list-group list-group-flush px-3">
+                    <li class="list-group-item">
+                        <i class="bi-camera-video me-1"></i>
+                        <strong>@Model.MovieTitle</strong>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="bi-calendar3 me-1"></i>
+                        <span>Review Date</span>
+                        <span class="badge rounded-pill bg-dark ms-1">@Model.CreatedDate.ToString("MMM d, yyyy")</span>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="bi-award me-1"></i>
+                        <span>Rating</span>
+                        <span class="badge rounded-pill bg-dark ms-1">@Model.Rating.ToString("F0") / 10</span>
+                    </li>
+                </ul>
+                <p class="p-3 m-0">@Model.ReviewText</p>
+            </div>
+            <div class="modal-footer">
+                @{ ReviewRequestModel deleteRequest = new ReviewRequestModel
+                    {
+                        MovieId = Model.MovieId,
+                        UserId = Model.UserId
+                    };
+                }
+                <partial name="_DeleteReviewPartial" model=@deleteRequest />
+                <a class="btn btn-primary" asp-controller="User" asp-action="EditReview" asp-route-id="@Model.MovieId">Edit</a>
+            </div>
+        </div>
+    </div>
+</div>

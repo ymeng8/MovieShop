@@ -76,6 +76,41 @@ namespace MovieShopMVC.Controllers
             await _userService.RemoveFavorite(model);
             return RedirectToAction("Details", "Movies", new { id = movieId });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddReview(ReviewRequestModel reviewRequest)
+        {
+            await _userService.AddMovieReview(reviewRequest);
+            return RedirectToAction("Details", "Movies", new { id = reviewRequest.MovieId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteReview(ReviewRequestModel deleteRequest)
+        {
+            await _userService.DeleteMovieReview(deleteRequest);
+            return RedirectToAction("Details", "Movies", new { id = deleteRequest.MovieId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditReview(int id)
+        {
+            var reviewDetails = await _userService.GetReviewDetails(_currentUser.UserId, id);
+            ReviewRequestModel editRequest = new ReviewRequestModel
+            {
+                MovieId = id,
+                MovieTitle = reviewDetails.MovieTitle,
+                UserId = reviewDetails.UserId,
+                Rating = reviewDetails.Rating,
+                ReviewText = reviewDetails.ReviewText
+            };
+            return View(editRequest);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditReview(ReviewRequestModel editRequest)
+        {
+            await _userService.UpdateMovieReview(editRequest);
+            return RedirectToAction("Details", "Movies", new { id = editRequest.MovieId });
+        }
     }
 }
 
