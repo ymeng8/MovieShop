@@ -7,6 +7,7 @@ namespace ApplicationCore.Contracts.Service
 	{
 		Task<bool> CreateUser(UserRegisterModel model);
 		Task<UserInfoResponseModel> ValidateUser(UserLoginModel model);
+		Task<bool> EmailExists(string email);
 	}
 }
 
