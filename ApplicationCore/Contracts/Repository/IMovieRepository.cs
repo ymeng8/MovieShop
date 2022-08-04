@@ -8,7 +8,10 @@ namespace ApplicationCore.Contracts.Repository
 	{
 		Task<List<Movie>> GetTop30HighestRevenueMovies();
 		Task<Movie> GetById(int id);
-		Task<PagedResultSet<Movie>> GetMoviesByGenrePagination(int genreId, int pageSize = 30, int page = 1);
+		Task<PagedResultSet<Movie>> GetMoviesByTitlePaged(string title, int pageSize, int page);
+		Task<PagedResultSet<Movie>> GetMoviesByGenrePaged(int genreId, int pageSize, int page);
+		Task<PagedResultSet<Review>> GetReviewsOfMovie(int movieId, int pageSize, int page);
+		Task<List<Movie>> GetTop30RatedMovies();
 	}
 }
 

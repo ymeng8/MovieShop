@@ -7,7 +7,10 @@ namespace ApplicationCore.Contracts.Service
 	{
 		Task<List<MovieCardModel>> GetTopRevenueMovies();
 		Task<MovieDetailsModel> GetMovieDetails(int movieId);
-		Task<PagedResultSet<MovieCardModel>> GetMoviesByPagination(int genreId, int pageSize = 30, int page = 1);
+		Task<PagedResultSet<MovieCardModel>> GetMoviesByTitlePaged(string title, int pageSize, int page);
+		Task<PagedResultSet<MovieCardModel>> GetMoviesByGenrePaged(int genreId, int pageSize, int page);
+		Task<PagedResultSet<ReviewDetailsModel>> GetReviewsOfMoviePaged(int movieId, int pageSize, int page);
+		Task<List<MovieCardModel>> GetTopRatedMovies();
 	}
 }
 

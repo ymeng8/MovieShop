@@ -57,10 +57,20 @@ namespace Infrastructure.Services
             return movieDetailsModel;
         }
 
-        public async Task<PagedResultSet<MovieCardModel>> GetMoviesByPagination(int genreId, int pageSize = 30, int page = 1)
+        public async Task<List<MovieCardModel>> GetTopRevenueMovies()
         {
-            var movies = await _movieRepository.GetMoviesByGenrePagination(genreId, pageSize, page);
- 
+            var movies = await _movieRepository.GetTop30HighestRevenueMovies();
+            var movieCards = new List<MovieCardModel>();
+            foreach (var movie in movies)
+            {
+                movieCards.Add(new MovieCardModel { Id = movie.Id, Title = movie.Title, PosterUrl = movie.PosterUrl });
+            }
+            return movieCards;
+        }
+
+        public async Task<PagedResultSet<MovieCardModel>> GetMoviesByTitlePaged(string title, int pageSize, int page)
+        {
+            var movies = await _movieRepository.GetMoviesByTitlePaged(title, pageSize, page);
             var movieCards = new List<MovieCardModel>();
             movieCards.AddRange(movies.Data.Select(m => new MovieCardModel
             {
@@ -72,14 +82,46 @@ namespace Infrastructure.Services
             return new PagedResultSet<MovieCardModel>(movieCards, page, pageSize, movies.TotalRowCount);
         }
 
-        public async Task<List<MovieCardModel>> GetTopRevenueMovies()
+        public async Task<PagedResultSet<MovieCardModel>> GetMoviesByGenrePaged(int genreId, int pageSize, int page)
         {
-            var movies = await _movieRepository.GetTop30HighestRevenueMovies();
+            var movies = await _movieRepository.GetMoviesByGenrePaged(genreId, pageSize, page);
+            var movieCards = new List<MovieCardModel>();
+            movieCards.AddRange(movies.Data.Select(m => new MovieCardModel
+            {
+                Id = m.Id,
+                PosterUrl = m.PosterUrl,
+                Title = m.Title
+            }));
+
+            return new PagedResultSet<MovieCardModel>(movieCards, page, pageSize, movies.TotalRowCount);
+        }
+
+        public async Task<PagedResultSet<ReviewDetailsModel>> GetReviewsOfMoviePaged(int movieId, int pageSize, int page)
+        {
+            var reviews = await _movieRepository.GetReviewsOfMovie(movieId, pageSize, page);
+            var reviewCards = new List<ReviewDetailsModel>();
+            reviewCards.AddRange(reviews.Data.Select(r => new ReviewDetailsModel
+            {
+                MovieId = r.MovieId,
+                MovieTitle = r.Movie.Title,
+                UserId = r.UserId,
+                Rating = r.Rating,
+                ReviewText = r.ReviewText,
+                CreatedDate = r.CreatedDate
+            }));
+
+            return new PagedResultSet<ReviewDetailsModel>(reviewCards, page, pageSize, reviews.TotalRowCount);
+        }
+
+        public async Task<List<MovieCardModel>> GetTopRatedMovies()
+        {
+            var movies = await _movieRepository.GetTop30RatedMovies();
             var movieCards = new List<MovieCardModel>();
             foreach (var movie in movies)
             {
                 movieCards.Add(new MovieCardModel { Id = movie.Id, Title = movie.Title, PosterUrl = movie.PosterUrl });
             }
+
             return movieCards;
         }
     }

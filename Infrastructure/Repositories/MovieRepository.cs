@@ -24,16 +24,27 @@ namespace Infrastructure.Repositories
             return movieDetails;
         }
 
-        public async Task<PagedResultSet<Movie>> GetMoviesByGenrePagination(int genreId, int pageSize = 30, int page = 1)
+        public async Task<List<Movie>> GetTop30HighestRevenueMovies()
+        {
+            var movies = await _movieShopDbContext.Movies.OrderByDescending(m => m.Revenue).Take(30).ToListAsync();
+            return movies;
+        }
+
+        public async Task<PagedResultSet<Movie>> GetMoviesByTitlePaged(string title, int pageSize, int page)
+        {
+            var count = await _movieShopDbContext.Movies.Where(m => m.Title.Contains(title)).CountAsync();
+            var movies = await _movieShopDbContext.Movies.Where(m => m.Title.Contains(title))
+                .OrderByDescending(m => m.Revenue).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var pagedMovies = new PagedResultSet<Movie>(movies, page, pageSize, count);
+
+            return pagedMovies;
+        }
+
+        public async Task<PagedResultSet<Movie>> GetMoviesByGenrePaged(int genreId, int pageSize, int page)
         {
             var totalMoviesCountOfGenre = await _movieShopDbContext.MovieGenres.Where(g => g.GenreId == genreId).CountAsync();
-            if (totalMoviesCountOfGenre == 0)
-            {
-                throw new Exception("No movies found for this genre");
-            }
-
             var movies = await _movieShopDbContext.MovieGenres.Where(g => g.GenreId == genreId)
-                .Include(g => g.Movie).OrderByDescending(m => m.Movie.Revenue)
+                .Include(g => g.Movie).OrderByDescending(g => g.Movie.Revenue)
                 .Select(m => new Movie
                 {
                     Id = m.MovieId,
@@ -41,15 +52,32 @@ namespace Infrastructure.Repositories
                     Title = m.Movie.Title
                 })
                 .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-
             var pagedMovies = new PagedResultSet<Movie>(movies, page, pageSize, totalMoviesCountOfGenre);
-
             return pagedMovies;
         }
 
-        public async Task<List<Movie>> GetTop30HighestRevenueMovies()
+        public async Task<PagedResultSet<Review>> GetReviewsOfMovie(int movieId, int pageSize, int page)
         {
-            var movies = await _movieShopDbContext.Movies.OrderByDescending(m => m.Revenue).Take(30).ToListAsync();
+            var totalCount = await _movieShopDbContext.Reviews.Where(r => r.MovieId == movieId).CountAsync();
+            var reviews = await _movieShopDbContext.Reviews.Where(r => r.MovieId == movieId)
+                .Include(r => r.Movie).OrderByDescending(r => r.CreatedDate)
+                .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var pagedReviews = new PagedResultSet<Review>(reviews, page, pageSize, totalCount);
+
+            return pagedReviews;
+        }
+
+        public async Task<List<Movie>> GetTop30RatedMovies()
+        {
+            var movies = await _movieShopDbContext.Movies.Include(m => m.Reviews)
+                .Select(m => new Movie
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    PosterUrl = m.PosterUrl,
+                    Rating = m.Reviews.Average(x => x.Rating)
+                }).Where(m => m.Rating != null).OrderByDescending(m => m.Rating).Take(30).ToListAsync();
+
             return movies;
         }
     }
