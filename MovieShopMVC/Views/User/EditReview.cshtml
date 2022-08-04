@@ -1,4 +1,10 @@
 ﻿@model ApplicationCore.Models.ReviewRequestModel
+@using ApplicationCore.Contracts.Service
+@inject IMovieService movieService
+
+@{
+    var movie = await movieService.GetMovieDetails(Model.MovieId);
+}
 
 @{
     ViewData["Title"] = "Edit Movie Review";
@@ -8,12 +14,11 @@
     <div class="row">
         <div class="col-md-6 mx-auto shadow p-4">
             <h2>Edit Review</h2>
-            <h6 class="text-secondary">@Model.MovieTitle</h6>
+            <h6 class="text-secondary">@movie.Title</h6>
             <hr />
             <form asp-action="EditReview">
                 <input asp-for="UserId" value="@Model.UserId" type="hidden" />
                 <input asp-for="MovieId" value="@Model.MovieId" type="hidden" />
-                <input asp-for="MovieTitle" value="@Model.MovieTitle" type="hidden" />
                 <div class="form-group mb-3">
                     <label asp-for="Rating" for="reviewRating" class="form-label">Choose rating:</label>
                     <select asp-for="Rating" id="reviewRating" class="form-select" required>

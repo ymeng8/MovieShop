@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "XuvJp/n9Fv7cN0SXQb7AHNCULRz/TlXuA1BmvgKVjk+FMdWylSZDvDQ+UK0ngIBFWyydv+cbNryy/32iq/aTXQ==",
+  "dgSpecHash": "X0zEStowR6vSPI7nTR9H3p0G6hiDC/Bmez6o7X8aJbJfIkAdtCyxhWywqnBwqKC4WpFtbs1bG4U2cqPJisuSfw==",
   "success": true,
   "projectFilePath": "/Users/yanjun.meng/Documents/GitHub/MovieShop/MovieShopAPI/MovieShopAPI.csproj",
   "expectedPackageFiles": [
+    "/Users/yanjun.meng/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/6.0.7/microsoft.aspnetcore.authentication.jwtbearer.6.0.7.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.aspnetcore.cryptography.internal/6.0.7/microsoft.aspnetcore.cryptography.internal.6.0.7.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.aspnetcore.cryptography.keyderivation/6.0.7/microsoft.aspnetcore.cryptography.keyderivation.6.0.7.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
@@ -28,8 +29,8 @@
     "/Users/yanjun.meng/.nuget/packages/microsoft.identitymodel.abstractions/6.22.0/microsoft.identitymodel.abstractions.6.22.0.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.identitymodel.jsonwebtokens/6.22.0/microsoft.identitymodel.jsonwebtokens.6.22.0.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.identitymodel.logging/6.22.0/microsoft.identitymodel.logging.6.22.0.nupkg.sha512",
-    "/Users/yanjun.meng/.nuget/packages/microsoft.identitymodel.protocols/6.8.0/microsoft.identitymodel.protocols.6.8.0.nupkg.sha512",
-    "/Users/yanjun.meng/.nuget/packages/microsoft.identitymodel.protocols.openidconnect/6.8.0/microsoft.identitymodel.protocols.openidconnect.6.8.0.nupkg.sha512",
+    "/Users/yanjun.meng/.nuget/packages/microsoft.identitymodel.protocols/6.10.0/microsoft.identitymodel.protocols.6.10.0.nupkg.sha512",
+    "/Users/yanjun.meng/.nuget/packages/microsoft.identitymodel.protocols.openidconnect/6.10.0/microsoft.identitymodel.protocols.openidconnect.6.10.0.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.identitymodel.tokens/6.22.0/microsoft.identitymodel.tokens.6.22.0.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.netcore.platforms/3.1.0/microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "/Users/yanjun.meng/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",

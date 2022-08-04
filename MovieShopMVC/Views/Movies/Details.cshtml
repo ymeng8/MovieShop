@@ -46,8 +46,7 @@
                 @{
                     ReviewRequestModel reviewRequest = new ReviewRequestModel
                     {
-                        MovieId = Model.Id,
-                        MovieTitle = Model.Title
+                        MovieId = Model.Id
                     };
                 }
                 <partial name="_ReviewPartial" model="@reviewRequest" />
@@ -55,9 +54,7 @@
                 @{
                     PurchaseRequestModel purchaseRequest = new PurchaseRequestModel
                     {
-                        MovieId = Model.Id,
-                        MovieTitle = Model.Title,
-                        TotalPrice = Model.Price.Value
+                        MovieId = Model.Id
                     };
                     <partial name="_PurchasePartial" model="purchaseRequest" />
                 }

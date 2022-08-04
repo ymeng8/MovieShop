@@ -39,12 +39,8 @@
                         <p class="p-3 m-0">@reviewDetails.ReviewText</p>
                     </div>
                     <div class="modal-footer">
-                        <form asp-controller="User" asp-action="DeleteReview">
-                            <input asp-for="UserId" value="@currentUser.UserId" type="hidden" />
-                            <input asp-for="MovieId" value="@Model.MovieId" type="hidden" />
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-outline-danger">Delete</button>
-                            </div>
+                        <form asp-controller="User" asp-action="DeleteReview" asp-route-movieId="@Model.MovieId">
+                            <input type="submit" value="Delete" class="btn btn-outline-danger" />
                         </form>
 
                         <a class="btn btn-primary" asp-controller="User" asp-action="EditReview" asp-route-id="@Model.MovieId">Edit</a>
@@ -67,7 +63,6 @@
                         <form asp-controller="User" asp-action="AddReview">
                             <input asp-for="UserId" value="@currentUser.UserId" type="hidden" />
                             <input asp-for="MovieId" value="@Model.MovieId" type="hidden" />
-                            <input asp-for="MovieTitle" value="@Model.MovieTitle" type="hidden" />
                             <div class="form-group mb-3">
                                 <label asp-for="Rating" for="reviewRating" class="form-label">Choose rating:</label>
                                 <select asp-for="Rating" id="reviewRating" class="form-select" required>

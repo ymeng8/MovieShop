@@ -75,10 +75,10 @@ namespace MovieShopMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteReview(ReviewRequestModel deleteRequest)
+        public async Task<ActionResult> DeleteReview(int movieId)
         {
-            await _userService.DeleteMovieReview(deleteRequest);
-            return RedirectToAction("Details", "Movies", new { id = deleteRequest.MovieId });
+            await _userService.DeleteMovieReview(_currentUser.UserId, movieId);
+            return RedirectToAction("Details", "Movies", new { id = movieId });
         }
 
         [HttpGet]
@@ -88,7 +88,6 @@ namespace MovieShopMVC.Controllers
             ReviewRequestModel editRequest = new ReviewRequestModel
             {
                 MovieId = id,
-                MovieTitle = reviewDetails.MovieTitle,
                 UserId = reviewDetails.UserId,
                 Rating = reviewDetails.Rating,
                 ReviewText = reviewDetails.ReviewText

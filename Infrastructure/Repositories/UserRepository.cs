@@ -38,6 +38,18 @@ namespace Infrastructure.Repositories
             var favorites = await _movieShopDbContext.Users.Include(u => u.Favorites).ThenInclude(f => f.Movie).FirstOrDefaultAsync(u => u.Id == userId);
             return favorites;
         }
+
+        public async Task<User> GetUserById(int userId)
+        {
+            var user = await _movieShopDbContext.Users.Include(u => u.RolesOfUser).FirstOrDefaultAsync(u => u.Id == userId);
+            return user;
+        }
+
+        public async Task<User> GetUserReviews(int userId)
+        {
+            var reviews = await _movieShopDbContext.Users.Include(u => u.Reviews).ThenInclude(r => r.Movie).FirstOrDefaultAsync(u => u.Id == userId);
+            return reviews;
+        }
     }
 }
 

@@ -3,6 +3,11 @@
 @using MovieShopMVC.Infra
 @inject ICurrentUser currentUser
 @inject IUserService userService
+@inject IMovieService movieService
+
+@{
+    var movie = await movieService.GetMovieDetails(Model.MovieId);
+}
 
 @if (currentUser.IsAuthenticated)
 {
@@ -14,7 +19,7 @@
     else
     {
         <button type="button" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#purchaseModal">
-            BUY @Model.TotalPrice.ToString("C")
+            BUY @movie.Price.Value.ToString("C")
         </button>
         <div class="modal fade" id="purchaseModal" tabindex="-1">
             <div class="modal-dialog">
@@ -24,14 +29,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        Buy <strong>@Model.MovieTitle</strong> for <strong>@Model.TotalPrice.ToString("C")</strong>?
+                        Buy <strong>@movie.Title</strong> for <strong>@movie.Price.Value.ToString("C")</strong>?
                     </div>
                     <div class="modal-footer">
                         <form asp-controller="User" asp-action="BuyMovie">
                             <input asp-for="UserId" value="@currentUser.UserId" type="hidden" />
                             <input asp-for="MovieId" value="@Model.MovieId" type="hidden" />
-                            <input asp-for="MovieTitle" value="@Model.MovieTitle" type="hidden" />
-                            <input asp-for="TotalPrice" value="@Model.TotalPrice" type="hidden" />
                             <div class="text-end">
                                 <button type="button" class="btn btn-outline-secondary me-1" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary">Yes</button>
@@ -45,5 +48,5 @@
 }
 else
 {
-    <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-light">BUY @Model.TotalPrice.ToString("C")</a>
+    <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-light">BUY @movie.Price.Value.ToString("C")</a>
 }

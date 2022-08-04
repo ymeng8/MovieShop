@@ -12,12 +12,14 @@ namespace Infrastructure.Services
         private readonly IUserRepository _userRepository;
         private readonly IFavoriteRepository _favoriteRepository;
         private readonly IReviewRepository _reviewRepository;
-        public UserService(IPurchaseRepository purchaseRepository, IUserRepository userRepository, IFavoriteRepository favoriteRepository, IReviewRepository reviewRepository)
+        private readonly IMovieRepository _movieRepository;
+        public UserService(IMovieRepository movieRepository, IPurchaseRepository purchaseRepository, IUserRepository userRepository, IFavoriteRepository favoriteRepository, IReviewRepository reviewRepository)
         {
             _purchaseRepository = purchaseRepository;
             _userRepository = userRepository;
             _favoriteRepository = favoriteRepository;
             _reviewRepository = reviewRepository;
+            _movieRepository = movieRepository;
         }
 
         public async Task<bool> AddMovieReview(ReviewRequestModel reviewRequest)
@@ -48,12 +50,13 @@ namespace Infrastructure.Services
             return true;
         }
 
-        public async Task<bool> DeleteMovieReview(ReviewRequestModel deleteRequest)
+        public async Task<bool> DeleteMovieReview(int userId, int movieId)
         {
-            var review = await _reviewRepository.GetById(deleteRequest.MovieId, deleteRequest.UserId);
+            var review = await _reviewRepository.GetById(movieId, userId);
             await _reviewRepository.RemoveReview(review);
             return true;
         }
+
         public async Task<bool> ReviewExists(int userId, int movieId)
         {
             var review = await _reviewRepository.GetById(movieId, userId);
@@ -159,11 +162,12 @@ namespace Infrastructure.Services
 
         public async Task<bool> PurchaseMovie(PurchaseRequestModel purchaseRequest)
         {
+            var movie = await _movieRepository.GetById(purchaseRequest.MovieId);
             Purchase dbPurchase = new Purchase
             {
                 UserId = purchaseRequest.UserId,
                 MovieId = purchaseRequest.MovieId,
-                TotalPrice = purchaseRequest.TotalPrice,
+                TotalPrice = movie.Price.GetValueOrDefault(),
                 PurchaseNumber = purchaseRequest.PurchaseNumber,
                 PurchaseDatetTime = purchaseRequest.PurchaseDateTime
             };
@@ -173,6 +177,42 @@ namespace Infrastructure.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<UserDetailsModel> GetUserDetails(int id)
+        {
+            var user = await _userRepository.GetUserById(id);
+            var userDetails = new UserDetailsModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                DateOfBirth = user.DateOfBirth,
+                PhoneNumber = user.PhoneNumber,
+                ProfilePictureUrl = user.ProfilePictureUrl
+            };
+            foreach (var role in user.RolesOfUser)
+            {
+                userDetails.Roles.Add(new UserRoleModel { RoleId = role.RoleId, UserId = role.UserId });
+            }
+            return userDetails;
+        }
+
+        public async Task<List<ReviewDetailsModel>> GetAllReviewsByUser(int userId)
+        {
+            var reviews = await _userRepository.GetUserReviews(userId);
+            var reviewCards = new List<ReviewDetailsModel>();
+            reviewCards.AddRange(reviews.Reviews.Select(r => new ReviewDetailsModel
+            {
+                UserId = r.UserId,
+                MovieId = r.MovieId,
+                MovieTitle = r.Movie.Title,
+                Rating = r.Rating,
+                ReviewText = r.ReviewText,
+                CreatedDate = r.CreatedDate
+            }));
+            return reviewCards;
         }
     }
 }
