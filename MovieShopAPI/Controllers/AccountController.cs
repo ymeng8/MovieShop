@@ -41,7 +41,8 @@ namespace MovieShopAPI.Controllers
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName)
+                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                new Claim("isAdmin", (user.Id == 1) ? "true" : "false")
             };
             var identityClaims = new ClaimsIdentity();
             identityClaims.AddClaims(claims);
